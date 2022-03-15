@@ -10,7 +10,7 @@ export default class UsuarioDto {
     lastName;
     avatar;
 
-    constructor({ _id, email, username, password, firstname, lastname, avatar, roles }) {
+    constructor({ _id, email, password, firstname, lastname, avatar, roles }) {
         if (_id === undefined) {
             this._id = undefined;
             this.roles = [];
@@ -23,7 +23,6 @@ export default class UsuarioDto {
         }
 
         this.email = email;
-        this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
         this.avatar = avatar;
@@ -34,7 +33,6 @@ export default class UsuarioDto {
        
         return {
             email:this.email,
-            username:this.username,
             firstname:this.firstname,
             lastname:this.lastname,
             avatar: this.avatar,
@@ -50,7 +48,6 @@ export default class UsuarioDto {
 }
 
 function createHash(password) {
-    console.log('createHash')
     return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 }
 

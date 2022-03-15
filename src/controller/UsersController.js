@@ -1,16 +1,16 @@
-import UsuariosApi from '../api/UsuariosApi.js'
+import UsersApi from '../api/UsersApi.js'
 import logger from '../logger.js'
 import jwt from 'jsonwebtoken'
 import { jwtOpts } from '../../config/config.js'
 import schema from '../validations/usuarios.js'
 
-const usuarios = new UsuariosApi();
+const users = new UsersApi();
 
 export async function SignUp(req, email, password, done) {
 
     try {
         const data = await schema.validateAsync(req.body)
-        const user = await usuarios.Agregar(data);
+        const user = await users.Agregar(data);
 
         done(null, user);
     }
@@ -25,7 +25,7 @@ export async function login(email, password, done) {
     logger.info(`usuarios controller login email: ${email} `)
 
     try {
-        const user = await usuarios.login(email, password)
+        const user = await users.login(email, password)
         return done(null, user);
     }
     catch (error) {
@@ -83,12 +83,12 @@ export function isAdmin(req, res, next) {
 }
 
 export async function AgregarRole(req, res) {
-    const user = await usuarios.AgregarRole(req.body.email, req.body.role);
+    const user = await users.AgregarRole(req.body.email, req.body.role);
     res.status(201).json(user.get())
 }
 
 export async function EliminarRole(req, res) {
-    const user = await usuarios.EliminarRole(req.body.email, req.body.role);
+    const user = await users.EliminarRole(req.body.email, req.body.role);
     res.status(204).json(user.get())
 }
 
@@ -104,11 +104,11 @@ export async function validaUser(req, res, next) {
     }
 
     try {
-        if (await usuarios.existeEmail(data.email)) {
+        if (await users.existeEmail(data.email)) {
             return res.status(400).json({ descripcion: 'El email ya esta registrado' })
         }
 
-        if (await usuarios.existeUsername(data.username))
+        if (await users.existeUsername(data.username))
             return res.status(400).json({ descripcion: 'El username ya esta registrado' })
     }
     catch (err) {

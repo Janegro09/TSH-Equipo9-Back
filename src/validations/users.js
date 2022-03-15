@@ -5,9 +5,6 @@ const schema = Joi.object(
         email: Joi.string()
             .email()
             .required(),
-        username: Joi.string()
-            .max(15)
-            .required(),
         password:Joi.string()
             .min(6)
             .max(15)

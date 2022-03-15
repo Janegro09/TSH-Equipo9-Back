@@ -8,7 +8,5 @@ const server = app.listen(PORT, () => {
     logger.info(`Servidor http escuchando en el puerto ${server.address().port}`)
 })
 
-
-
 server.on("error", error => logger.error(`Error en servidor ${error}`))
 

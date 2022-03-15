@@ -1,20 +1,15 @@
 import ContenedorDao from './ContenedorDao.js';
 
 
-export default class UsuariosDao extends ContenedorDao {
+export default class UsersDao extends ContenedorDao {
 
   constructor() {
-    super('usuarios')
+    super('users')
   }
 
   async getByEmail(email)
   {
     return super.getById({email:email})
-  }
-
-  async getByUsername(username)
-  {
-    return super.getById({username:username})
   }
 
   async addRole(email, role) {
