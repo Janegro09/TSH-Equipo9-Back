@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Janegro09/TSH-Equipo9-Back/issues"
   },
-  "homepage": "https://github.com/Janegro09/TSH-Equipo9-Back#readme"
+  "homepage": "https://github.com/Janegro09/TSH-Equipo9-Back#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
 }
