@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import passport from '../controller/passport.js'
+import passport from '../controller/PassportLocal.js'
 import {validaUser} from '../controller/UsersController.js'
 
-import { getfailloginController, getfailsignupController, getlogoutController, AgregarRole, EliminarRole } from '../controller/UsersController.js'
+import { getfailloginController, getfailsignupController, getlogoutController, AgregarRole, EliminarRole, postLoginController, postSignupController } from '../controller/UsersController.js'
 
 const UsersRoutes = new Router();
 
@@ -16,8 +16,9 @@ UsersRoutes.get('/failsignup', getfailsignupController)
 
 UsersRoutes.get('/logout', getlogoutController)
 
-UsersRoutes.post('/usuarios/role', AgregarRole)
-UsersRoutes.delete('/usuarios/role', EliminarRole)
+// UsersRoutes.post('/usuarios/role', AgregarRole)
+
+// UsersRoutes.delete('/usuarios/role', EliminarRole)
 
 export default UsersRoutes 
 

@@ -1,7 +1,7 @@
-import ContenedorDao from './ContenedorDao.js';
+import ContainerDao from './ContainerDao.js';
 
 
-export default class UsersDao extends ContenedorDao {
+export default class UsersDao extends ContainerDao {
 
   constructor() {
     super('users')

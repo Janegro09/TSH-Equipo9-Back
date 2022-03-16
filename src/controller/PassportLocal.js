@@ -1,36 +1,29 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
+import { SignUpController, LoginController } from './UsersController.js'
 
-import { SignUp, login } from '../../controller/usuarios.js'
+import UsersApi from '../api/UsersApi.js'
+const users = new UsersApi();
 
-passport.use('signup', new LocalStrategy({ passReqToCallback: true }, SignUp))
 
-passport.use('login', new LocalStrategy(login));
+
+passport.use('signup', new LocalStrategy({usernameField: 'email', passwordField: 'password', passReqToCallback: true }, SignUpController))
+
+passport.use('login', new LocalStrategy({ usernameField: 'email', passwordField: 'password'}, LoginController));
 
 passport.serializeUser(function (user, done) {
-  done(null, user);
+  done(null, user.email);
 });
 
-passport.deserializeUser(function (user, done) {
-  done(null, user)
+passport.deserializeUser(async function (email, done) {
+  try {
+    const usuario = await users.get(email)
+    done(null, usuario);
+  }
+  catch (err) {
+    logger.error(err);
+    return done(null, false);
+  }
 });
 
-function mwdIsAuth(req, res, next) {
-  if (req.isAuthenticated()) {
-    next()
-  } else {
-    res.status(401).json({ error: 'Acceso no autorizado' })
-  }
-}
-
-function mwdIsAdmin(req, res, next) {
-
-  if (!req.user.admin) {
-    res.status(403).json({ error: `${req.user.username} ruta no autorizada` })
-  }
-  else {
-    next()
-  }
-}
-
-export { passport, mwdIsAuth, mwdIsAdmin };
+export default passport;

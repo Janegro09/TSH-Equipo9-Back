@@ -1,10 +1,12 @@
 {
+  "type": "module",
   "name": "tsh-equipo9",
   "version": "1.0.0",
-  "description": "Rodolfo",
-  "main": "index.js",
+  "description": "TS Hackathon",
+  "main": "src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "NODE_ENV=production node .",
+    "dev": "NODE_ENV=development nodemon ."
   },
   "repository": {
     "type": "git",

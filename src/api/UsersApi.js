@@ -9,7 +9,7 @@ export default class UsersApi {
         this.usersDao = new UsersDao();
     }
 
-    async existeEmail(email) {
+    async emailExists(email) {
         try {
             await this.usersDao.getByEmail(email);
             return true;
@@ -20,31 +20,17 @@ export default class UsersApi {
         }
     }
     
-    async existeUsername(username) {
-        try {
-            await this.usersDao.getByEmail(username);
-            return true;
-        }
-        catch (err) {
-            if (err.estado == 404) return false;
-            else throw err
-        }
-    }
 
-    async recuperar(email) {
+
+    async get(email) {
         const data = await this.usersDao.getByEmail(email);
         return new UserDto(data);
     }
     
 
-    async ObtenerXEmail(email) {
-        const usuario = await this.recuperar(email)
-        return usuario.get();
-    }
-
     async login(email, password){
         try{
-            const usuario = await this.recuperar(email)
+            const usuario = await this.get(email)
 
             if (!usuario.isValidPassword(password)) 
                 return false
@@ -57,16 +43,14 @@ export default class UsersApi {
 
     }
 
-    async Agregar(data){
+    async add(data){
         try {
 
             const usuario = new UserDto(data)
-
+console.log(usuario)
             usuario._id = await this.usersDao.add(usuario)
 
             logger.info(`Registro Ok `);
-    
-            await this.enviarMailNuevoRegistro(usuario)
     
             return usuario.get();
         }

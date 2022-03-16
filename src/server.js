@@ -1,9 +1,10 @@
 import express, { json, urlencoded } from 'express'
-import passport from './controller/passport.js'
+import passport from './controller/PassportLocal.js'
 import DefaultRoutes from "./routes/default.js"
 import UsersRoutes from './routes/users.js'
-import  MongoStore from 'connect-mongo'
-
+import MongoStore from 'connect-mongo'
+import config from '../config/config.js'
+import session from 'express-session';
 
 const app = express()
 
@@ -16,16 +17,16 @@ const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true }
 
 app.use(session({
     /* ------------------------------------------------------------ */
-    /*           Persistencia por mongo altlas database             */
+    /*           Persistencia por mongo atlas database             */
     /* ------------------------------------------------------------ */
     store: MongoStore.create({
         //En Atlas connect App :  Make sure to change the node version to 2.2.12:
-        mongoUrl: 'mongodb://user:us3r@cluster0-shard-00-00.3svtz.mongodb.net:27017,cluster0-shard-00-01.3svtz.mongodb.net:27017,cluster0-shard-00-02.3svtz.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-3m6b86-shard-0&authSource=admin&retryWrites=true&w=majority',
+        mongoUrl: config.MONGO_SESSION_URL,
         mongoOptions: advancedOptions
     }),
     /* ------------------------------------------------------------ */
 
-    secret: 'shhhhhhhhhhhhhhhhhhhhh',
+    secret: 'TecoHackathonEquipo9',
     resave: true,
     saveUninitialized: false,
     cookie: {

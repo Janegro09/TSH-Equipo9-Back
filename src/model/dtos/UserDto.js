@@ -5,7 +5,6 @@ export default class UsuarioDto {
     roles;
     password;
     email;
-    username;
     firstname;
     lastName;
     avatar;
@@ -26,7 +25,6 @@ export default class UsuarioDto {
         this.firstname = firstname;
         this.lastname = lastname;
         this.avatar = avatar;
-
     }
 
     get() {
@@ -35,7 +33,7 @@ export default class UsuarioDto {
             email:this.email,
             firstname:this.firstname,
             lastname:this.lastname,
-            avatar: this.avatar,
+                avatar: this.avatar,
             roles: this.roles
         }
     }

@@ -1,16 +1,15 @@
 import UsersApi from '../api/UsersApi.js'
 import logger from '../logger.js'
-import jwt from 'jsonwebtoken'
-import { jwtOpts } from '../../config/config.js'
-import schema from '../validations/usuarios.js'
+import schema from '../validations/users.js'
 
 const users = new UsersApi();
 
-export async function SignUp(req, email, password, done) {
-
+export async function SignUpController(req, email, password, done) {
+console.log('SignUpController')
     try {
         const data = await schema.validateAsync(req.body)
-        const user = await users.Agregar(data);
+console.log(data)        
+        const user = await users.add(data);
 
         done(null, user);
     }
@@ -20,7 +19,7 @@ export async function SignUp(req, email, password, done) {
     }
 }
 
-export async function login(email, password, done) {
+export async function LoginController(email, password, done) {
 
     logger.info(`usuarios controller login email: ${email} `)
 
@@ -35,24 +34,16 @@ export async function login(email, password, done) {
 
 };
 
-export async function responseToken(req, res) {
-    const user = req.user;
-    const token = jwt.sign({ user: user }, jwtOpts.secretOrKey, { expiresIn: jwtOpts.expireIn });
-
-    res.status(200).json({ token })
+export function postLoginController(req, res) {
+    res.status(200).json(req.user)
 }
 
-export function validateToken(token, cb) {
-
-    if (token.exp < Math.floor(Date.now() / 1000)) {
-        logger.warn('token caducado')
-        return cb(null, false)
-    }
-    else return cb(null, token.user);
+export function postSignupController(req, res) {
+    res.status(200).json(req.user)
 }
 
 export function getfailloginController(req, res) {
-    res.status(401).json({ "descripcion": "username o contraseña incorrecta" })
+    res.status(401).json({ "descripcion": "email o contraseña incorrecta" })
 }
 
 export function getfailsignupController(req, res) {
@@ -65,21 +56,6 @@ export function getlogoutController(req, res) {
         if (!err) res.status(200).json({ 'status': 'ok' })
         else res.status(500).send({ status: 'Logout ERROR', body: err })
     })
-}
-
-export function isAdmin(req, res, next) {
-   
-    let isAdmin = false
-   
-    req.user.roles.forEach(element => {
-        if (element == 'Admin')
-            isAdmin = true
-    });
-
-    if(isAdmin)
-        next()
-    else
-        res.status(403).json({ error: `${req.user.username} ruta no autorizada` })
 }
 
 export async function AgregarRole(req, res) {
@@ -97,6 +73,7 @@ export async function validaUser(req, res, next) {
     let data
     try {
         data = await schema.validateAsync(req.body)
+
     }
     catch (err) {
         logger.warn(`Error al validaciones esquema de usuarios`)
@@ -104,12 +81,10 @@ export async function validaUser(req, res, next) {
     }
 
     try {
-        if (await users.existeEmail(data.email)) {
+
+        if (await users.emailExists(data.email)) {
             return res.status(400).json({ descripcion: 'El email ya esta registrado' })
         }
-
-        if (await users.existeUsername(data.username))
-            return res.status(400).json({ descripcion: 'El username ya esta registrado' })
     }
     catch (err) {
         logger.error(`Error al ejecutar validaciones de usuarios ${err}`)
@@ -120,3 +95,11 @@ export async function validaUser(req, res, next) {
 
 }
 
+export function mwdIsAuth(req, res, next) {
+    if (req.isAuthenticated()) {
+      next()
+    } else {
+      res.status(401).json({ error: 'Acceso no autorizado' })
+    }
+  }
+  
